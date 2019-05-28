@@ -1,0 +1,39 @@
+parameters:
+    '%env(RABBITMQ_PORT)%': 5672
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Arthem\Bundle\RabbitBundle\Consumer\LoggerAwareConsumer: ~
+    Arthem\Bundle\RabbitBundle\Consumer\NullConsumer: ~
+
+    Arthem\Bundle\RabbitBundle\Consumer\EventConsumer:
+        public: true
+        tags:
+            - { name: monolog.logger, channel: consumer }
+
+    Arthem\Bundle\RabbitBundle\Producer\EventProducer:
+        tags:
+            - { name: monolog.logger, channel: producer }
+
+    Arthem\Bundle\RabbitBundle\Producer\Adapter\DirectProducerAdapter:
+        arguments:
+            $kernelEnvironment: '%kernel.environment%'
+            $workingDir: '%kernel.project_dir%'
+
+    Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter:
+
+    Arthem\Bundle\RabbitBundle\Consumer\Event\AbstractEntityManagerHandler:
+        tags:
+            - { name: monolog.logger, channel: consumer }
+
+    Arthem\Bundle\RabbitBundle\Command\DirectConsumerCommand:
+        tags:
+            - { name: 'console.command' }
+
+    Arthem\Bundle\RabbitBundle\Command\MessageProduceCommand:
+        tags:
+            - { name: 'console.command' }

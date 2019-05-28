@@ -1,0 +1,25 @@
+{
+    "name": "arthem/rabbit-bundle",
+    "description": "Simple RabbitMQ bundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2",
+        "ext-json": "*",
+        "symfony/framework-bundle": "^4.0",
+        "psr/log": "^1",
+        "symfony/console": "^4.0",
+        "php-amqplib/rabbitmq-bundle": "^1"
+    },
+    "require-dev": {
+        "symfony/process": "^4.0"
+    },
+    "suggest": {
+        "doctrine/orm": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arthem\\Bundle\\RabbitBundle\\": ""
+        }
+    }
+}
