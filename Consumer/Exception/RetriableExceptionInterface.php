@@ -7,7 +7,7 @@ namespace Arthem\Bundle\RabbitBundle\Consumer\Exception;
 interface RetriableExceptionInterface
 {
     /**
-     * In microseconds. NULL for no sleep
+     * In microseconds. NULL for no sleep.
      *
      * @return int|null
      */

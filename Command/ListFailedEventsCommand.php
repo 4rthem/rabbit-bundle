@@ -2,16 +2,10 @@
 
 namespace Arthem\Bundle\RabbitBundle\Command;
 
-use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
-use Arthem\Bundle\RabbitBundle\Consumer\EventConsumer;
 use Arthem\Bundle\RabbitBundle\Model\FailedEvent;
 use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
-use Arthem\Bundle\RabbitBundle\Producer\EventProducer;
-use Doctrine\ORM\EntityManagerInterface;
-use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

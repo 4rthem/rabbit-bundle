@@ -3,9 +3,7 @@
 namespace Arthem\Bundle\RabbitBundle\Command;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
-use Arthem\Bundle\RabbitBundle\Consumer\EventConsumer;
 use Arthem\Bundle\RabbitBundle\Producer\EventProducer;
-use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

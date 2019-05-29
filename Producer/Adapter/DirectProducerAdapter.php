@@ -4,7 +4,6 @@ namespace Arthem\Bundle\RabbitBundle\Producer\Adapter;
 
 use Arthem\Bundle\RabbitBundle\Command\DirectConsumerCommand;
 use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -42,7 +41,6 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
             $process->getCommandLine(),
             $process->getErrorOutput()
         )));
-
 
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);

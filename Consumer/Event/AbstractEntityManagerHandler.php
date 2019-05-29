@@ -3,9 +3,7 @@
 namespace Arthem\Bundle\RabbitBundle\Consumer\Event;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Exception\RestartRequiredException;
-use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerAwareInterface;
 
 abstract class AbstractEntityManagerHandler extends AbstractLogHandler
 {
@@ -46,7 +44,7 @@ abstract class AbstractEntityManagerHandler extends AbstractLogHandler
     private function pingOrRestart()
     {
         $connection = $this->em->getConnection();
-        if ($connection->ping() === false) {
+        if (false === $connection->ping()) {
             $this->logger->info('Lost connection, restarting...');
             throw new RestartRequiredException();
         }

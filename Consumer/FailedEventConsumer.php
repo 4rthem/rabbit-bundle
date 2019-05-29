@@ -3,7 +3,6 @@
 namespace Arthem\Bundle\RabbitBundle\Consumer;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
-use Arthem\Bundle\RabbitBundle\Model\FailedEventInterface;
 use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;

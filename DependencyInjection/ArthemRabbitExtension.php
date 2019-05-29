@@ -30,7 +30,7 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
         if ($config['direct']) {
@@ -75,7 +75,7 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
                     'read_write_timeout' => 3,
                     'keepalive' => true,
                     'heartbeat' => 0,
-                ]
+                ],
             ],
             'producers' => $this->getProducers($config),
             'consumers' => $this->getConsumers($config),
@@ -113,7 +113,7 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
             $consumers[$name] = [
                 'connection' => $defaultConnection,
                 'exchange_options' => [
-                    'name' => 'x-' . $name,
+                    'name' => 'x-'.$name,
                     'type' => 'direct',
                 ],
                 'queue_options' => array_merge($defaultQueuesOptions, [
@@ -140,7 +140,7 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
             $producers[$name] = [
                 'connection' => $defaultConnection,
                 'exchange_options' => [
-                    'name' => 'x-' . $name,
+                    'name' => 'x-'.$name,
                     'type' => 'direct',
                 ],
             ];

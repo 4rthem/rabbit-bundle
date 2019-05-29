@@ -35,7 +35,7 @@ class FailedEventManager
     public function createFailedEvent(string $type, array $payload): FailedEventInterface
     {
         /** @var FailedEventInterface $failedEvent */
-        $failedEvent = new $this->model;
+        $failedEvent = new $this->model();
         $failedEvent->setType($type);
         $failedEvent->setPayload($payload);
 

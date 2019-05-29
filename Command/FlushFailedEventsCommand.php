@@ -38,7 +38,6 @@ class FlushFailedEventsCommand extends Command
         $this
             ->setName(self::COMMAND_NAME)
             ->addOption('no-confirmation', null, InputOption::VALUE_NONE, 'Whether it must be confirmed before flushing');
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
