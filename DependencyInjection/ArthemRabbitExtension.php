@@ -92,20 +92,20 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
         $defaultQueuesOptions = [];
 
         if ($config['failure']['enabled']) {
-            $consumers['failed_events'] = [
+            $consumers['failed_event'] = [
                 'connection' => $defaultConnection,
                 'exchange_options' => [
-                    'name' => 'x-failed-events',
+                    'name' => 'x-failed-event',
                     'type' => 'direct',
                 ],
                 'queue_options' => [
-                    'name' => 'failed-events',
+                    'name' => 'failed-event',
                 ],
                 'callback' => FailedEventConsumer::class,
             ];
 
             $defaultQueuesOptions['arguments'] = [
-                'x-dead-letter-exchange' => ['S', 'x-failed-events'],
+                'x-dead-letter-exchange' => ['S', 'x-failed-event'],
             ];
         }
 

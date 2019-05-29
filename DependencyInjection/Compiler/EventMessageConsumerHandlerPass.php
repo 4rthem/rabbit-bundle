@@ -4,6 +4,7 @@ namespace Arthem\Bundle\RabbitBundle\DependencyInjection\Compiler;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessageHandlerInterface;
 use Arthem\Bundle\RabbitBundle\Consumer\EventConsumer;
+use Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -13,10 +14,8 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(EventConsumer::class)) {
-            return;
-        }
         $eventConsumer = $container->getDefinition(EventConsumer::class);
+        $producerDefinition = $container->getDefinition(AMQPProducerAdapter::class);
         $taggedServices = $container->findTaggedServiceIds('arthem_rabbit.event_handler');
 
         /* @var $id EventMessageHandlerInterface */
@@ -26,7 +25,9 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
                 continue;
             }
             $events = $id::getHandledEvents();
+            $queue = $id::getQueueName();
             foreach ($events as $event) {
+                $producerDefinition->addMethodCall('addProducer', [$event, new Reference(sprintf('old_sound_rabbit_mq.%s_producer', $queue))]);
                 $eventConsumer->addMethodCall('addHandler', [$event, new Reference($id)]);
             }
         }
