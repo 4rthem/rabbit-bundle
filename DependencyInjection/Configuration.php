@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('direct')->defaultValue($this->debug)->end()
                 ->scalarNode('default_connection_name')->defaultValue('default')->end()
                 ->arrayNode('queues')
-                    ->defaultValue([['name' => 'event']])
+                    ->defaultValue(['event' => []])
                     ->useAttributeAsKey('name')
                     ->prototype('array')->end()
                 ->end()

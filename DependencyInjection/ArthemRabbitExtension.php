@@ -4,13 +4,12 @@ namespace Arthem\Bundle\RabbitBundle\DependencyInjection;
 
 use Arthem\Bundle\RabbitBundle\Consumer\EventConsumer;
 use Arthem\Bundle\RabbitBundle\Consumer\FailedEventConsumer;
-use Arthem\Bundle\RabbitBundle\Consumer\NullConsumer;
+use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\DirectProducerAdapter;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\EventProducerAdapterInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -41,15 +40,15 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
         }
 
         if ($config['failure']['enabled']) {
-            $definition = new Definition(FailedEventConsumer::class);
-            $definition->setAutowired(true);
-            $definition->setPublic(true);
-            $definition->setArgument('$model', $config['failure']['model']);
-            $definition->addTag('monolog.logger', [
-                'channel' => 'failed_event',
-            ]);
-            $container->setDefinition($definition->getClass(), $definition);
+            $loader->load('failed_events.yml');
+            $this->configureFailedEvents($container, $config['failure']);
         }
+    }
+
+    private function configureFailedEvents(ContainerBuilder $container, $config): void
+    {
+        $definition = $container->getDefinition(FailedEventManager::class);
+        $definition->setArgument('$model', $config['model']);
     }
 
     public function prepend(ContainerBuilder $container)
@@ -70,7 +69,7 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
                     'port' => '%env(RABBITMQ_PORT)%',
                     'user' => '%env(RABBITMQ_USER)%',
                     'password' => '%env(RABBITMQ_PASSWORD)%',
-                    'vhost' => '/',
+                    'vhost' => '%env(RABBITMQ_VHOST)%',
                     'lazy' => true,
                     'connection_timeout' => 3,
                     'read_write_timeout' => 3,
@@ -110,15 +109,15 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
             ];
         }
 
-        foreach ($config['queues'] as $queue) {
-            $consumers[$queue['name']] = [
+        foreach ($config['queues'] as $name => $queue) {
+            $consumers[$name] = [
                 'connection' => $defaultConnection,
                 'exchange_options' => [
-                    'name' => 'x-' . $queue['name'],
+                    'name' => 'x-' . $name,
                     'type' => 'direct',
                 ],
                 'queue_options' => array_merge($defaultQueuesOptions, [
-                    'name' => $queue['name'],
+                    'name' => $name,
                 ]),
                 'qos_options' => [
                     'prefetch_size' => 0,
@@ -137,11 +136,11 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
         $defaultConnection = $config['default_connection_name'];
 
         $producers = [];
-        foreach ($config['queues'] as $queue) {
-            $producers[$queue['name']] = [
+        foreach ($config['queues'] as $name => $queue) {
+            $producers[$name] = [
                 'connection' => $defaultConnection,
                 'exchange_options' => [
-                    'name' => 'x-' . $queue['name'],
+                    'name' => 'x-' . $name,
                     'type' => 'direct',
                 ],
             ];

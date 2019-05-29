@@ -32,6 +32,7 @@ class EventProducer implements LoggerAwareInterface
         $additionalProperties['content_type'] = 'application/json';
 
         $this->adapter->publish(
+            $message->getType(),
             $message->toJson(),
             $routingKey,
             $additionalProperties

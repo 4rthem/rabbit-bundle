@@ -1,6 +1,3 @@
-parameters:
-    '%env(RABBITMQ_PORT)%': 5672
-
 services:
     _defaults:
         autowire: true

@@ -1,0 +1,24 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Arthem\Bundle\RabbitBundle\Model\FailedEventManager:
+
+    Arthem\Bundle\RabbitBundle\Consumer\FailedEventConsumer:
+        public: true
+        tags:
+            - { name: monolog.logger, channel: failed_event}
+
+    Arthem\Bundle\RabbitBundle\Command\ListFailedEventsCommand:
+        tags:
+            - { name: 'console.command' }
+
+    Arthem\Bundle\RabbitBundle\Command\RequeueFailedEventsCommand:
+        tags:
+            - { name: 'console.command' }
+
+    Arthem\Bundle\RabbitBundle\Command\FlushFailedEventsCommand:
+        tags:
+            - { name: 'console.command' }

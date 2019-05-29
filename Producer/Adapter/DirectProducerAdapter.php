@@ -27,7 +27,7 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
         $this->workingDir = $workingDir;
     }
 
-    public function publish(string $msgBody, string $routingKey = null, array $additionalProperties = [])
+    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = [])
     {
         $process = Process::fromShellCommandline(sprintf(
             './bin/console -vvv --env=%s %s "%s"',
