@@ -3,6 +3,7 @@
 namespace Arthem\Bundle\RabbitBundle\Command;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
+use Arthem\Bundle\RabbitBundle\Model\FailedEventInterface;
 use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
 use Arthem\Bundle\RabbitBundle\Producer\EventProducer;
 use Symfony\Component\Console\Command\Command;
@@ -45,6 +46,7 @@ class RequeueFailedEventsCommand extends Command
         $failedEvents = $this->failedEventManager->iterate();
 
         foreach ($failedEvents as $failedEvent) {
+            /** @var FailedEventInterface $failedEvent */
             $failedEvent = $failedEvent[0];
 
             $message = new EventMessage($failedEvent->getType(), $failedEvent->getPayload());

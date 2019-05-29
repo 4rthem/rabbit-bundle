@@ -59,5 +59,7 @@ class FlushFailedEventsCommand extends Command
 
         $this->failedEventManager->flush();
         $output->writeln('Flushed.');
+
+        return 0;
     }
 }

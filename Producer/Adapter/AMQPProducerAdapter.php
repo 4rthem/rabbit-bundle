@@ -26,7 +26,7 @@ class AMQPProducerAdapter implements EventProducerAdapterInterface
         $this->producers[$eventType] = $producer;
     }
 
-    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = [])
+    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
     {
         if (!isset($this->producers[$eventType])) {
             throw new RuntimeException(sprintf('Undefined producer "%1$s". Maybe you forgot to declare queue in ArthemRabbitBundle?

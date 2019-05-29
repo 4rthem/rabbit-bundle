@@ -15,6 +15,7 @@ class MessageResponseException extends Exception
 
     public function __construct(int $response)
     {
+        parent::__construct();
         $this->response = $response;
     }
 
