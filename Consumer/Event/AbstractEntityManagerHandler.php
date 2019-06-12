@@ -27,12 +27,16 @@ abstract class AbstractEntityManagerHandler extends AbstractLogHandler
 
     public function preHandle(): void
     {
+        parent::preHandle();
+
         $this->pingOrRestart();
         $this->em->clear();
     }
 
     public function postHandle(): void
     {
+        parent::postHandle();
+
         $i = 0;
         // Rollback all unclosed transactions
         while ($this->em->getConnection()->isTransactionActive() && $i++ < 5) {

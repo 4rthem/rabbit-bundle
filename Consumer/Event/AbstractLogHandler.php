@@ -13,4 +13,12 @@ abstract class AbstractLogHandler implements EventMessageHandlerInterface, Logge
     {
         return 'event';
     }
+
+    public function preHandle(): void
+    {
+    }
+
+    public function postHandle(): void
+    {
+    }
 }
