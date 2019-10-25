@@ -39,9 +39,14 @@ abstract class AbstractEntityManagerHandler extends AbstractLogHandler
 
         $i = 0;
         // Rollback all unclosed transactions
-        while ($this->em->getConnection()->isTransactionActive() && $i++ < 5) {
-            $this->logger->critical(sprintf('Unterminated transaction in handler %s', get_class($this)));
+        while ($this->em->getConnection()->isTransactionActive() && $i < 5) {
+            $this->logger->critical(sprintf(
+                'Unterminated transaction in handler %s at level %d',
+                get_class($this),
+                $i
+            ));
             $this->em->rollback();
+            ++$i;
         }
     }
 
