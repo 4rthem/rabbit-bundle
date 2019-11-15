@@ -35,7 +35,7 @@ class EventConsumer extends LoggerAwareConsumer
         /** @var EventMessageHandlerInterface $handler */
         $handler = $this->handlers[$message->getType()];
 
-        $this->logger->info(sprintf('Process event message "%s"', $message->getType()), [
+        $this->logger->info(sprintf('Consume event message "%s"', $message->getType()), [
             'payload' => $message->getPayload(),
         ]);
 
@@ -49,6 +49,8 @@ class EventConsumer extends LoggerAwareConsumer
         }
 
         $handler->postHandle();
+
+        $this->logger->info(sprintf('Message "%s" consumed with response %s', $message->getType(), $response));
 
         return $response;
     }

@@ -42,6 +42,9 @@ abstract class LoggerAwareConsumer implements ConsumerInterface, LoggerAwareInte
         }
 
         if ($e instanceof RestartRequiredException) {
+            $this->logger->warning('Consumer restart caught: '.$e->getMessage(), [
+                'exception' => $e,
+            ]);
             $this->nackAndRequeueMessage($msg);
             exit(2);
         }
