@@ -42,13 +42,16 @@ class EventConsumer extends LoggerAwareConsumer
         $handler->preHandle();
 
         try {
-            $handler->handle($message);
-            $response = ConsumerInterface::MSG_ACK;
-        } catch (MessageResponseException $e) {
-            $response = $e->getResponse();
+            try {
+                $handler->handle($message);
+                $response = ConsumerInterface::MSG_ACK;
+            } catch (MessageResponseException $e) {
+                $response = $e->getResponse();
+            }
+        } catch (\Throwable $e) {
+            $handler->postHandle();
+            throw $e;
         }
-
-        $handler->postHandle();
 
         $this->logger->info(sprintf('Message "%s" consumed with response %s', $message->getType(), $response));
 
