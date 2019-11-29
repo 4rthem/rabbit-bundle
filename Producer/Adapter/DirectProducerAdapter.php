@@ -28,12 +28,14 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
 
     public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
     {
-        $process = Process::fromShellCommandline(sprintf(
-            './bin/console -vvv --env=%s %s "%s"',
-            $this->kernelEnvironment,
+        $process = new Process([
+            './bin/console',
+            '-vvv',
+            '--env='.$this->kernelEnvironment,
             DirectConsumerCommand::COMMAND_NAME,
-            $this->escapeMessage($msgBody)
-        ));
+            $msgBody
+        ]);
+
         $process->setWorkingDirectory($this->workingDir);
         $process->run();
         $this->logger->debug(preg_replace('#\n\r?#', "\n >>> ", sprintf(
