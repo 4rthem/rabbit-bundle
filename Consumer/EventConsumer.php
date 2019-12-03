@@ -53,6 +53,8 @@ class EventConsumer extends LoggerAwareConsumer
             throw $e;
         }
 
+        $handler->postHandle();
+
         $this->logger->info(sprintf('Message "%s" consumed with response %s', $message->getType(), $response));
 
         return $response;
