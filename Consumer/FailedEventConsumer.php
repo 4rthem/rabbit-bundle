@@ -4,9 +4,9 @@ namespace Arthem\Bundle\RabbitBundle\Consumer;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
 use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
-use Doctrine\Common\Persistence\ObjectManager;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
+use \Doctrine\ORM\EntityManagerInterface;
 use Exception;
 
 class FailedEventConsumer implements ConsumerInterface
@@ -17,14 +17,14 @@ class FailedEventConsumer implements ConsumerInterface
     private $failedEventManager;
 
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
-    public function __construct(FailedEventManager $failedEventManager, ObjectManager $om)
+    public function __construct(FailedEventManager $failedEventManager, EntityManagerInterface $em)
     {
         $this->failedEventManager = $failedEventManager;
-        $this->om = $om;
+        $this->em = $em;
     }
 
     final public function execute(AMQPMessage $msg)
@@ -35,8 +35,8 @@ class FailedEventConsumer implements ConsumerInterface
         }
 
         $failedEvent = $this->failedEventManager->createFailedEvent($message->getType(), $message->getPayload());
-        $this->om->persist($failedEvent);
-        $this->om->flush();
+        $this->em->persist($failedEvent);
+        $this->em->flush();
 
         return ConsumerInterface::MSG_ACK;
     }
