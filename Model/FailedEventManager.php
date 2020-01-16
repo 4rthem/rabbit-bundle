@@ -4,32 +4,30 @@ declare(strict_types=1);
 
 namespace Arthem\Bundle\RabbitBundle\Model;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
+use Doctrine\ORM\EntityRepository;
 
 class FailedEventManager
 {
     /**
-     * @var ObjectManager
+     * @var EntityManagerInterface
      */
-    private $om;
+    private $em;
 
     /**
      * @var string
      */
     private $model;
 
-    public function __construct(ObjectManager $om, string $model)
+    public function __construct(EntityManagerInterface $em, string $model)
     {
-        $this->om = $om;
+        $this->em = $em;
         $this->model = $model;
     }
 
-    public function getRepository(): ObjectRepository
+    public function getRepository(): EntityRepository
     {
-        return $this->om->getRepository($this->model);
+        return $this->em->getRepository($this->model);
     }
 
     public function createFailedEvent(string $type, array $payload): FailedEventInterface
@@ -47,35 +45,25 @@ class FailedEventManager
      */
     public function iterate(): iterable
     {
-        if ($this->om instanceof EntityManagerInterface) {
-            return $this->om->createQueryBuilder()
-                ->select('a')
-                ->from($this->model, 'a')
-                ->getQuery()
-                ->iterate();
-        }
-
-        return $this->getRepository()->findAll();
+        return $this->em->createQueryBuilder()
+            ->select('a')
+            ->from($this->model, 'a')
+            ->getQuery()
+            ->iterate();
     }
 
     public function remove(FailedEventInterface $failedEvent): void
     {
-        $this->om->remove($failedEvent);
-        $this->om->flush();
+        $this->em->remove($failedEvent);
+        $this->em->flush();
     }
 
     public function flush(): void
     {
-        if ($this->om instanceof EntityManagerInterface) {
-            $this->om->createQueryBuilder()
-                ->delete()
-                ->from($this->model, 'a')
-                ->getQuery()
-                ->execute();
-
-            return;
-        }
-
-        throw new Exception(sprintf('Unsupported Object Manager "%s" for flush', get_class($this->om)));
+        $this->em->createQueryBuilder()
+            ->delete()
+            ->from($this->model, 'a')
+            ->getQuery()
+            ->execute();
     }
 }
