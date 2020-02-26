@@ -2,8 +2,8 @@
 
 namespace Arthem\Bundle\RabbitBundle\Consumer\Exception;
 
-use Throwable;
 use Exception;
+use Throwable;
 
 class ConsumerLoggableException extends Exception
 {
@@ -24,9 +24,6 @@ class ConsumerLoggableException extends Exception
         $this->level = $level;
     }
 
-    /**
-     * @return array
-     */
     public function getContext(): array
     {
         return $this->context;

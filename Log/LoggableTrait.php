@@ -14,8 +14,6 @@ trait LoggableTrait
     protected $logger;
 
     /**
-     * @param LoggerInterface $logger
-     *
      * @required
      */
     public function setLogger(LoggerInterface $logger)

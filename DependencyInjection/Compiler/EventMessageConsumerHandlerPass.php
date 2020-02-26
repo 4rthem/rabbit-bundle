@@ -5,10 +5,10 @@ namespace Arthem\Bundle\RabbitBundle\DependencyInjection\Compiler;
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessageHandlerInterface;
 use Arthem\Bundle\RabbitBundle\Consumer\EventConsumer;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
-use ReflectionClass;
 
 class EventMessageConsumerHandlerPass implements CompilerPassInterface
 {

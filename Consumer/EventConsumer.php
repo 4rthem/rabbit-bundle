@@ -5,9 +5,9 @@ namespace Arthem\Bundle\RabbitBundle\Consumer;
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessageHandlerInterface;
 use Arthem\Bundle\RabbitBundle\Consumer\Exception\MessageResponseException;
+use Exception;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
-use Exception;
 
 class EventConsumer extends LoggerAwareConsumer
 {

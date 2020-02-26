@@ -3,8 +3,8 @@
 namespace Arthem\Bundle\RabbitBundle\Producer;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
-use Arthem\Bundle\RabbitBundle\Producer\Adapter\EventProducerAdapterInterface;
 use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
+use Arthem\Bundle\RabbitBundle\Producer\Adapter\EventProducerAdapterInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\NullLogger;
 

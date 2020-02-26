@@ -3,8 +3,8 @@
 namespace Arthem\Bundle\RabbitBundle\Consumer;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Exception\ConsumerLoggableException;
-use Arthem\Bundle\RabbitBundle\Consumer\Exception\RetriableExceptionInterface;
 use Arthem\Bundle\RabbitBundle\Consumer\Exception\RestartRequiredException;
+use Arthem\Bundle\RabbitBundle\Consumer\Exception\RetriableExceptionInterface;
 use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
 use Doctrine\ORM\ORMException;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;

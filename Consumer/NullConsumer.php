@@ -2,9 +2,9 @@
 
 namespace Arthem\Bundle\RabbitBundle\Consumer;
 
+use Exception;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
-use Exception;
 
 class NullConsumer implements ConsumerInterface
 {

@@ -8,8 +8,6 @@ interface RetriableExceptionInterface
 {
     /**
      * In microseconds. NULL for no sleep.
-     *
-     * @return int|null
      */
     public function getSleepTime(): ?int;
 }

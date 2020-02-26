@@ -4,10 +4,10 @@ namespace Arthem\Bundle\RabbitBundle\Consumer;
 
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
 use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
-use \Doctrine\ORM\EntityManagerInterface;
-use Exception;
 
 class FailedEventConsumer implements ConsumerInterface
 {

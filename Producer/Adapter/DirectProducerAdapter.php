@@ -33,7 +33,7 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
             '-vvv',
             '--env='.$this->kernelEnvironment,
             DirectConsumerCommand::COMMAND_NAME,
-            $msgBody
+            $msgBody,
         ]);
 
         $process->setWorkingDirectory($this->workingDir);
