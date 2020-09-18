@@ -2,23 +2,20 @@
 
 namespace Arthem\Bundle\RabbitBundle\Producer\Adapter;
 
+use App\Kernel;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Arthem\Bundle\RabbitBundle\Command\DirectConsumerCommand;
 use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
 
 class DirectProducerAdapter implements EventProducerAdapterInterface
 {
     use LoggableTrait;
 
-    /**
-     * @var string
-     */
-    private $kernelEnvironment;
-    /**
-     * @var string
-     */
-    private $workingDir;
+    private string $kernelEnvironment;
+    private string $workingDir;
 
     public function __construct(string $kernelEnvironment, string $workingDir)
     {
@@ -28,29 +25,20 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
 
     public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
     {
-        $process = new Process([
-            './bin/console',
-            '-vvv',
-            '--env='.$this->kernelEnvironment,
-            DirectConsumerCommand::COMMAND_NAME,
-            $msgBody,
+        /** @var BaseKernel $kernel */
+        $kernel = new Kernel($this->kernelEnvironment, true);
+        $kernel->boot();
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command' => DirectConsumerCommand::COMMAND_NAME,
+            'message' => $msgBody,
         ]);
 
-        $process->setWorkingDirectory($this->workingDir);
-        $process->run();
-        $this->logger->debug(preg_replace('#\n\r?#', "\n >>> ", sprintf(
-            'Command log [%s]: %s',
-            $process->getCommandLine(),
-            $process->getErrorOutput()
-        )));
+        $output = new NullOutput();
+        $application->run($input, $output);
 
-        if (!$process->isSuccessful()) {
-            throw new ProcessFailedException($process);
-        }
-    }
-
-    private function escapeMessage(string $message): string
-    {
-        return addcslashes($message, '"\\');
+        $kernel->shutdown();
     }
 }
