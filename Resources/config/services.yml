@@ -21,6 +21,11 @@ services:
             $kernelEnvironment: '%kernel.environment%'
             $workingDir: '%kernel.project_dir%'
 
+    Arthem\Bundle\RabbitBundle\Producer\Adapter\DirectPhpCommandProducerAdapter:
+        arguments:
+            $kernelEnvironment: '%kernel.environment%'
+            $workingDir: '%kernel.project_dir%'
+
     Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter:
 
     Arthem\Bundle\RabbitBundle\Consumer\Event\AbstractEntityManagerHandler:

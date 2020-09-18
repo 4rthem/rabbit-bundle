@@ -11,14 +11,8 @@ class DirectPhpCommandProducerAdapter implements EventProducerAdapterInterface
 {
     use LoggableTrait;
 
-    /**
-     * @var string
-     */
-    private $kernelEnvironment;
-    /**
-     * @var string
-     */
-    private $workingDir;
+    private string $kernelEnvironment;
+    private string $workingDir;
 
     public function __construct(string $kernelEnvironment, string $workingDir)
     {

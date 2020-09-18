@@ -25,6 +25,7 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
 
     public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
     {
+        // TODO Symfony kernel (or application run) has memory leak
         /** @var BaseKernel $kernel */
         $kernel = new Kernel($this->kernelEnvironment, true);
         $kernel->boot();
