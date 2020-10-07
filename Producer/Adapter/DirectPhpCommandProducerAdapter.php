@@ -22,15 +22,8 @@ class DirectPhpCommandProducerAdapter implements EventProducerAdapterInterface
 
     public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
     {
-        $process = new Process([
-            './bin/console',
-            '-vvv',
-            '--env='.$this->kernelEnvironment,
-            DirectConsumerCommand::COMMAND_NAME,
-            $msgBody,
-        ]);
+        $process = $this->createProcess($msgBody);
 
-        $process->setWorkingDirectory($this->workingDir);
         $process->run();
         $this->logger->debug(preg_replace('#\n\r?#', "\n >>> ", sprintf(
             'Command log [%s]: %s',
@@ -43,8 +36,18 @@ class DirectPhpCommandProducerAdapter implements EventProducerAdapterInterface
         }
     }
 
-    private function escapeMessage(string $message): string
+    public function createProcess(string $msgBody): Process
     {
-        return addcslashes($message, '"\\');
+        $process = new Process([
+            './bin/console',
+            '-vvv',
+            '--env='.$this->kernelEnvironment,
+            DirectConsumerCommand::COMMAND_NAME,
+            $msgBody,
+        ]);
+
+        $process->setWorkingDirectory($this->workingDir);
+
+        return $process;
     }
 }

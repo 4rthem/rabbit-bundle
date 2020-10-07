@@ -6,6 +6,7 @@ use Arthem\Bundle\RabbitBundle\Consumer\EventConsumer;
 use Arthem\Bundle\RabbitBundle\Consumer\FailedEventConsumer;
 use Arthem\Bundle\RabbitBundle\Model\FailedEventManager;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter;
+use Arthem\Bundle\RabbitBundle\Producer\Adapter\DefferedPhpCommandProducerAdapter;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\DirectPhpCommandProducerAdapter;
 use Arthem\Bundle\RabbitBundle\Producer\Adapter\EventProducerAdapterInterface;
 use LogicException;
@@ -34,10 +35,16 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
         $loader->load('services.yml');
 
         if ($config['direct']) {
-            $container->setAlias(EventProducerAdapterInterface::class, DirectPhpCommandProducerAdapter::class);
+            if ($config['deffered']) {
+                $adapterClass = DefferedPhpCommandProducerAdapter::class;
+            } else {
+                $adapterClass = DirectPhpCommandProducerAdapter::class;
+            }
         } else {
-            $container->setAlias(EventProducerAdapterInterface::class, AMQPProducerAdapter::class);
+            $adapterClass = AMQPProducerAdapter::class;
         }
+
+        $container->setAlias(EventProducerAdapterInterface::class, $adapterClass);
 
         if ($config['failure']['enabled']) {
             $loader->load('failed_events.yml');

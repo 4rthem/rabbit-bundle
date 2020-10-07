@@ -26,6 +26,10 @@ services:
             $kernelEnvironment: '%kernel.environment%'
             $workingDir: '%kernel.project_dir%'
 
+    Arthem\Bundle\RabbitBundle\Producer\Adapter\DefferedPhpCommandProducerAdapter:
+        tags:
+            - { name: kernel.event_subscriber }
+
     Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter:
 
     Arthem\Bundle\RabbitBundle\Consumer\Event\AbstractEntityManagerHandler:

@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->booleanNode('direct')->defaultValue($this->debug)->end()
+                ->booleanNode('deffered')->defaultTrue()->end()
                 ->scalarNode('default_connection_name')->defaultValue('default')->end()
                 ->arrayNode('queues')
                     ->defaultValue(['event' => []])
