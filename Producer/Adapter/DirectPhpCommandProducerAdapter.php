@@ -50,4 +50,9 @@ class DirectPhpCommandProducerAdapter implements EventProducerAdapterInterface
 
         return $process;
     }
+
+    private function escapeMessage(string $message): string
+    {
+        return addcslashes($message, '"\\');
+    }
 }
