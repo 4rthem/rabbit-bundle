@@ -41,7 +41,9 @@ class AMQPProducerAdapter implements EventProducerAdapterInterface
         ?array $headers = null
     ): void
     {
-        if (!isset($this->producers[$eventType])) {
+        $producerName = $this->eventsMap[$eventType];
+
+        if (!isset($this->producers[$producerName])) {
             throw new RuntimeException(sprintf('Undefined producer "%1$s". Maybe you forgot to declare queue in ArthemRabbitBundle?
 # config/packages/arthem_rabbit.yaml
 arthem_rabbit:
@@ -49,8 +51,6 @@ arthem_rabbit:
     %1$s: ~
 ', $eventType));
         }
-
-        $producerName = $this->eventsMap[$eventType];
 
         if (isset($headers['producer_name'])) {
             $producerName = $headers['producer_name'];

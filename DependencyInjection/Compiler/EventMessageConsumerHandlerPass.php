@@ -25,6 +25,7 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
         $taggedServices = $container->findTaggedServiceIds('arthem_rabbit.event_handler');
 
         /* @var $id EventMessageHandlerInterface */
+        $eventsMap = [];
         foreach ($taggedServices as $id => $tags) {
             $reflectionClass = new ReflectionClass($id);
             if ($reflectionClass->isAbstract()) {
@@ -32,12 +33,11 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
             }
             $events = $id::getHandledEvents();
             $queue = $id::getQueueName();
-            $eventsMap = [];
             foreach ($events as $event) {
                 $eventsMap[$event] = $queue;
                 $eventConsumer->addMethodCall('addHandler', [$event, new Reference($id)]);
             }
-            $producerDefinition->addMethodCall('setEventsMap', [$eventsMap]);
         }
+        $producerDefinition->addMethodCall('setEventsMap', [$eventsMap]);
     }
 }
