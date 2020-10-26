@@ -23,7 +23,13 @@ class DirectProducerAdapter implements EventProducerAdapterInterface
         $this->workingDir = $workingDir;
     }
 
-    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
+    public function publish(
+        string $eventType,
+        string $msgBody,
+        string $routingKey = null,
+        array $additionalProperties = [],
+        ?array $headers = null
+    ): void
     {
         // TODO Symfony kernel (or application run) has memory leak
         /** @var BaseKernel $kernel */

@@ -20,7 +20,7 @@ class ProducerPass implements CompilerPassInterface
 
         /* @var $id ProducerInterface */
         foreach ($taggedServices as $id => $tags) {
-            if (!preg_match('#old_sound_rabbit_mq\.(.+?)_producer#', $id, $regs)) {
+            if (!preg_match('#^old_sound_rabbit_mq\.(.+?)_producer$#', $id, $regs)) {
                 continue;
             }
             $producerDefinition->addMethodCall('addProducer', [$regs[1], new Reference($id)]);

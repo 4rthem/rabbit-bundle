@@ -14,6 +14,12 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
+        if (
+            !$container->hasDefinition(EventConsumer::class)
+            || !$container->hasDefinition(AMQPProducerAdapter::class)
+        ) {
+            return;
+        }
         $eventConsumer = $container->getDefinition(EventConsumer::class);
         $producerDefinition = $container->getDefinition(AMQPProducerAdapter::class);
         $taggedServices = $container->findTaggedServiceIds('arthem_rabbit.event_handler');
@@ -26,10 +32,12 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
             }
             $events = $id::getHandledEvents();
             $queue = $id::getQueueName();
+            $eventsMap = [];
             foreach ($events as $event) {
-                $producerDefinition->addMethodCall('addProducer', [$event, new Reference(sprintf('old_sound_rabbit_mq.%s_producer', $queue))]);
+                $eventsMap[$event] = $queue;
                 $eventConsumer->addMethodCall('addHandler', [$event, new Reference($id)]);
             }
+            $producerDefinition->addMethodCall('setEventsMap', [$eventsMap]);
         }
     }
 }

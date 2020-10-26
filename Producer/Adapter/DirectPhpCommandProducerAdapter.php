@@ -20,7 +20,13 @@ class DirectPhpCommandProducerAdapter implements EventProducerAdapterInterface
         $this->workingDir = $workingDir;
     }
 
-    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
+    public function publish(
+        string $eventType,
+        string $msgBody,
+        string $routingKey = null,
+        array $additionalProperties = [],
+        ?array $headers = null
+    ): void
     {
         $process = $this->createProcess($msgBody);
 

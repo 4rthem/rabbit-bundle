@@ -4,5 +4,11 @@ namespace Arthem\Bundle\RabbitBundle\Producer\Adapter;
 
 interface EventProducerAdapterInterface
 {
-    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void;
+    public function publish(
+        string $eventType,
+        string $msgBody,
+        string $routingKey = null,
+        array $additionalProperties = [],
+        ?array $headers = null
+    ): void;
 }

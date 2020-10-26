@@ -23,8 +23,12 @@ class EventProducer implements LoggerAwareInterface
         $this->adapter = $adapter;
     }
 
-    public function publish(EventMessage $message, string $routingKey = null, array $additionalProperties = [])
-    {
+    public function publish(
+        EventMessage $message,
+        string $routingKey = null,
+        array $additionalProperties = [],
+        ?array $headers = null
+    ): void {
         $this->logger->info(sprintf('Produce event message "%s"', $message->getType()), [
             'payload' => json_encode($message->getPayload()),
         ]);
@@ -35,7 +39,8 @@ class EventProducer implements LoggerAwareInterface
             $message->getType(),
             $message->toJson(),
             $routingKey,
-            $additionalProperties
+            $additionalProperties,
+            $headers
         );
     }
 }

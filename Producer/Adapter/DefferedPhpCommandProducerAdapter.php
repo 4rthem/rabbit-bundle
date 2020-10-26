@@ -20,7 +20,13 @@ class DefferedPhpCommandProducerAdapter implements EventProducerAdapterInterface
         $this->producer = $producer;
     }
 
-    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
+    public function publish(
+        string $eventType,
+        string $msgBody,
+        string $routingKey = null,
+        array $additionalProperties = [],
+        ?array $headers = null
+    ): void
     {
         $this->events[] = $msgBody;
     }

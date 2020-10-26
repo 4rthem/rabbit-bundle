@@ -14,7 +14,9 @@ class AMQPProducerAdapter implements EventProducerAdapterInterface
     /**
      * @var ProducerInterface[]
      */
-    private $producers;
+    private array $producers = [];
+
+    private array $eventsMap = [];
 
     public function __construct()
     {
@@ -26,7 +28,18 @@ class AMQPProducerAdapter implements EventProducerAdapterInterface
         $this->producers[$eventType] = $producer;
     }
 
-    public function publish(string $eventType, string $msgBody, string $routingKey = null, array $additionalProperties = []): void
+    public function setEventsMap(array $eventsMap): void
+    {
+        $this->eventsMap = $eventsMap;
+    }
+
+    public function publish(
+        string $eventType,
+        string $msgBody,
+        string $routingKey = null,
+        array $additionalProperties = [],
+        ?array $headers = null
+    ): void
     {
         if (!isset($this->producers[$eventType])) {
             throw new RuntimeException(sprintf('Undefined producer "%1$s". Maybe you forgot to declare queue in ArthemRabbitBundle?
@@ -37,10 +50,18 @@ arthem_rabbit:
 ', $eventType));
         }
 
-        $this->producers[$eventType]->publish(
+        $producerName = $this->eventsMap[$eventType];
+
+        if (isset($headers['producer_name'])) {
+            $producerName = $headers['producer_name'];
+            unset($headers['producer_name']);
+        }
+
+        $this->producers[$producerName]->publish(
             $msgBody,
             $routingKey,
-            $additionalProperties
+            $additionalProperties,
+            $headers
         );
     }
 }
