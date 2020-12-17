@@ -8,6 +8,7 @@ use Arthem\Bundle\RabbitBundle\Consumer\Exception\MessageResponseException;
 use Exception;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
+use Throwable;
 
 class EventConsumer extends LoggerAwareConsumer
 {
@@ -48,7 +49,7 @@ class EventConsumer extends LoggerAwareConsumer
             } catch (MessageResponseException $e) {
                 $response = $e->getResponse();
             }
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $handler->postHandle();
             throw $e;
         }

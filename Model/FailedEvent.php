@@ -21,7 +21,7 @@ abstract class FailedEvent implements FailedEventInterface
     /**
      * @var array
      *
-     * @ORM\Column(type="json_array")
+     * @ORM\Column(type="json")
      */
     protected $payload;
 

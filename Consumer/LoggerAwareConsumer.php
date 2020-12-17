@@ -62,9 +62,8 @@ abstract class LoggerAwareConsumer implements ConsumerInterface, LoggerAwareInte
 
     private function nackAndRequeueMessage(AMQPMessage $msg): void
     {
-        /** @var AMQPChannel $channel */
-        $channel = $msg->delivery_info['channel'];
-        $channel->basic_nack($msg->delivery_info['delivery_tag'], false, true);
+        $channel = $msg->getChannel();
+        $channel->basic_nack($msg->getDeliveryTag(), false, true);
     }
 
     abstract protected function processMessage(AMQPMessage $message): int;
