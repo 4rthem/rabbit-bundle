@@ -119,18 +119,18 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
         foreach ($config['queues'] as $name => $queue) {
             $consumers[$name] = [
                 'connection' => $defaultConnection,
-                'exchange_options' => [
+                'exchange_options' => array_merge([
                     'name' => 'x-'.$name,
                     'type' => 'direct',
-                ],
-                'queue_options' => array_merge($defaultQueuesOptions, [
+                ], $queue['exchange_options'] ?? []),
+                'queue_options' => array_merge_recursive($defaultQueuesOptions, [
                     'name' => $name,
-                ]),
-                'qos_options' => [
+                ], $queue['queue_options'] ?? []),
+                'qos_options' => array_merge([
                     'prefetch_size' => 0,
                     'prefetch_count' => 1,
                     'global' => false,
-                ],
+                ], $queue['qos_options'] ?? []),
                 'callback' => EventConsumer::class,
             ];
         }

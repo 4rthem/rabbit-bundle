@@ -27,8 +27,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('arthem_rabbit');
-        $rootNode = $treeBuilder->getRootNode();
+        $treeBuilder = new TreeBuilder();
+        $rootNode = $treeBuilder->root('arthem_rabbit');
 
         $rootNode
             ->children()
@@ -38,7 +38,10 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('queues')
                     ->defaultValue(['event' => []])
                     ->useAttributeAsKey('name')
-                    ->prototype('array')->end()
+                    ->prototype('array')
+                        ->prototype('variable')
+                        ->end()
+                    ->end()
                 ->end()
                 ->arrayNode('failure')
                     ->canBeEnabled()

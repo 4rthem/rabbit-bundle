@@ -4,20 +4,24 @@ namespace Arthem\Bundle\RabbitBundle\Consumer\Event;
 
 class EventMessage
 {
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
+    private array $payload;
+    private ?string $routingKey;
+    private array $properties;
+    private ?array $headers;
 
-    /**
-     * @var array
-     */
-    private $payload;
-
-    public function __construct(string $type, array $payload)
-    {
+    public function __construct(
+        string $type,
+        array $payload,
+        ?string $routingKey = null,
+        array $properties = [],
+        ?array $headers = null
+    ) {
         $this->type = $type;
         $this->payload = $payload;
+        $this->routingKey = $routingKey;
+        $this->properties = $properties;
+        $this->headers = $headers;
     }
 
     public function getType(): string
@@ -28,6 +32,21 @@ class EventMessage
     public function getPayload(): array
     {
         return $this->payload;
+    }
+
+    public function getRoutingKey(): ?string
+    {
+        return $this->routingKey;
+    }
+
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    public function getHeaders(): ?array
+    {
+        return $this->headers;
     }
 
     public function toJson(): string

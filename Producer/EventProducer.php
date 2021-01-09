@@ -25,22 +25,27 @@ class EventProducer implements LoggerAwareInterface
 
     public function publish(
         EventMessage $message,
-        string $routingKey = null,
-        array $additionalProperties = [],
-        ?array $headers = null
+        string $deprecatedRoutingKey = null, // @deprecated use in EventMessage
+        array $deprecatedProperties = [], // @deprecated use in EventMessage
+        ?array $deprecatedHeaders = null // @deprecated use in EventMessage
     ): void {
         $this->logger->info(sprintf('Produce event message "%s"', $message->getType()), [
             'payload' => json_encode($message->getPayload()),
         ]);
 
-        $additionalProperties['content_type'] = 'application/json';
+        $properties = $message->getProperties();
+        $properties['content_type'] = 'application/json';
+
+        if (!empty($deprecatedProperties)) {
+            $properties = array_merge($deprecatedProperties, $properties);
+        }
 
         $this->adapter->publish(
             $message->getType(),
             $message->toJson(),
-            $routingKey,
-            $additionalProperties,
-            $headers
+            $message->getRoutingKey() ?? $deprecatedRoutingKey,
+            $properties,
+            $message->getHeaders() ?? $deprecatedHeaders
         );
     }
 }
