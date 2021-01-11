@@ -2,7 +2,7 @@
 
 namespace Arthem\Bundle\RabbitBundle\Consumer\Event;
 
-use Arthem\Bundle\RabbitBundle\HandlerEvents;
+use Arthem\Bundle\RabbitBundle\Event\TerminateEvent;
 use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
 use Psr\Log\LoggerAwareInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -11,10 +11,7 @@ abstract class AbstractLogHandler implements EventMessageHandlerInterface, Logge
 {
     use LoggableTrait;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * @required
@@ -35,6 +32,6 @@ abstract class AbstractLogHandler implements EventMessageHandlerInterface, Logge
 
     public function postHandle(): void
     {
-        $this->eventDispatcher->dispatch(HandlerEvents::TERMINATE);
+        $this->eventDispatcher->dispatch(new TerminateEvent(), TerminateEvent::NAME);
     }
 }

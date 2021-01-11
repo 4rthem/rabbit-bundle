@@ -15,10 +15,7 @@ class DirectConsumerCommand extends Command
 
     protected static $defaultName = self::COMMAND_NAME;
 
-    /**
-     * @var EventConsumer
-     */
-    private $eventConsumer;
+    private EventConsumer $eventConsumer;
 
     protected function configure()
     {
@@ -42,5 +39,7 @@ class DirectConsumerCommand extends Command
         $additionalProperties = [];
         $message = new AMQPMessage($message, $additionalProperties);
         $this->eventConsumer->processMessage($message);
+
+        return 0;
     }
 }

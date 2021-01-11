@@ -2,7 +2,7 @@
 
 namespace Arthem\Bundle\RabbitBundle\Producer\Adapter;
 
-use Arthem\Bundle\RabbitBundle\HandlerEvents;
+use Arthem\Bundle\RabbitBundle\Event\TerminateEvent;
 use Arthem\Bundle\RabbitBundle\Log\LoggableTrait;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -50,7 +50,7 @@ class DefferedPhpCommandProducerAdapter implements EventProducerAdapterInterface
         return [
             KernelEvents::TERMINATE => 'runEvents',
             ConsoleEvents::TERMINATE => 'runEvents',
-            HandlerEvents::TERMINATE => 'runEvents',
+            TerminateEvent::NAME => 'runEvents',
         ];
     }
 }
