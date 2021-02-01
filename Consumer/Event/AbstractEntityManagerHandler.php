@@ -7,10 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 abstract class AbstractEntityManagerHandler extends AbstractLogHandler
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     /**
      * @required

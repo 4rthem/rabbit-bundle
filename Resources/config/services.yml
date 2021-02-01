@@ -32,7 +32,7 @@ services:
 
     Arthem\Bundle\RabbitBundle\Producer\Adapter\AMQPProducerAdapter:
 
-    Arthem\Bundle\RabbitBundle\Consumer\Event\AbstractEntityManagerHandler:
+    Arthem\Bundle\RabbitBundle\Consumer\Event\AbstractLogHandler:
         tags:
             - { name: monolog.logger, channel: consumer }
 

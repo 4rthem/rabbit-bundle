@@ -5,9 +5,11 @@ namespace Arthem\Bundle\RabbitBundle\Consumer;
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessage;
 use Arthem\Bundle\RabbitBundle\Consumer\Event\EventMessageHandlerInterface;
 use Arthem\Bundle\RabbitBundle\Consumer\Exception\MessageResponseException;
+use Arthem\Bundle\RabbitBundle\Event\TerminateEvent;
 use Exception;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
 class EventConsumer extends LoggerAwareConsumer
@@ -15,7 +17,16 @@ class EventConsumer extends LoggerAwareConsumer
     /**
      * @var EventMessageHandlerInterface[]
      */
-    private $handlers = [];
+    private array $handlers = [];
+    private EventDispatcherInterface $eventDispatcher;
+
+    /**
+     * @required
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     public function addHandler(string $name, EventMessageHandlerInterface $handler)
     {
@@ -51,10 +62,12 @@ class EventConsumer extends LoggerAwareConsumer
             }
         } catch (Throwable $e) {
             $handler->postHandle();
+            $this->eventDispatcher->dispatch(new TerminateEvent(), TerminateEvent::NAME);
             throw $e;
         }
 
         $handler->postHandle();
+        $this->eventDispatcher->dispatch(new TerminateEvent(), TerminateEvent::NAME);
 
         $this->logger->info(sprintf('Message "%s" consumed with response %s', $message->getType(), $response));
 
