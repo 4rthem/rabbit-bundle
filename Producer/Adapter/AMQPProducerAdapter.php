@@ -18,6 +18,8 @@ class AMQPProducerAdapter implements EventProducerAdapterInterface
 
     private array $eventsMap = [];
 
+    private array $defaultPriorities = [];
+
     public function __construct()
     {
         $this->setLogger(new NullLogger());
@@ -31,6 +33,11 @@ class AMQPProducerAdapter implements EventProducerAdapterInterface
     public function setEventsMap(array $eventsMap): void
     {
         $this->eventsMap = $eventsMap;
+    }
+
+    public function setDefaultPriorities(array $defaultPriorities): void
+    {
+        $this->defaultPriorities = $defaultPriorities;
     }
 
     public function publish(
@@ -55,6 +62,10 @@ arthem_rabbit:
         if (isset($headers['producer_name'])) {
             $producerName = $headers['producer_name'];
             unset($headers['producer_name']);
+        }
+
+        if (!isset($additionalProperties['priority']) && isset($this->defaultPriorities[$eventType])) {
+            $additionalProperties['priority'] = $this->defaultPriorities[$eventType];
         }
 
         $this->producers[$producerName]->publish(

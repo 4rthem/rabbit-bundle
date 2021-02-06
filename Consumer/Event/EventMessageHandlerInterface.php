@@ -8,6 +8,8 @@ interface EventMessageHandlerInterface
 
     public static function getQueueName(): string;
 
+    public static function getDefaultPriority(): ?int;
+
     public function preHandle(): void;
 
     public function postHandle(): void;

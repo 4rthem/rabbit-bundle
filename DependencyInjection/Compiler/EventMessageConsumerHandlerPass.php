@@ -26,6 +26,7 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
 
         /* @var $id EventMessageHandlerInterface */
         $eventsMap = [];
+        $defaultPriorities = [];
         foreach ($taggedServices as $id => $tags) {
             $reflectionClass = new ReflectionClass($id);
             if ($reflectionClass->isAbstract()) {
@@ -33,11 +34,19 @@ class EventMessageConsumerHandlerPass implements CompilerPassInterface
             }
             $events = $id::getHandledEvents();
             $queue = $id::getQueueName();
+            $defaultPriority = $id::getDefaultPriority();
+
             foreach ($events as $event) {
                 $eventsMap[$event] = $queue;
+
+                if (null !== $defaultPriority) {
+                    $defaultPriorities[$event] = $defaultPriority;
+                }
+
                 $eventConsumer->addMethodCall('addHandler', [$event, new Reference($id)]);
             }
         }
         $producerDefinition->addMethodCall('setEventsMap', [$eventsMap]);
+        $producerDefinition->addMethodCall('setDefaultPriorities', [$defaultPriorities]);
     }
 }

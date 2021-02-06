@@ -14,6 +14,11 @@ abstract class AbstractLogHandler implements EventMessageHandlerInterface, Logge
         return 'event';
     }
 
+    public static function getDefaultPriority(): ?int
+    {
+        return null;
+    }
+
     public function preHandle(): void
     {
     }
