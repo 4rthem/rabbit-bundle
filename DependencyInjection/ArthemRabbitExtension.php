@@ -69,9 +69,21 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
             throw new LogicException(sprintf('You must enable %s', $bundle));
         }
 
+        $useSsl = getenv('RABBITMQ_SSL');
+        $useSsl = false !== $useSsl ? $useSsl : false;
+        if (is_string($useSsl) && in_array(strtolower($useSsl), ['1', 'true', 'on'], true)) {
+            $useSsl = true;
+        } else {
+            $useSsl = false;
+        }
+        if (isset($config['use_ssl'])) {
+            $useSsl = $config['use_ssl'];
+        }
+
         $oldSoundConfig = [
             'connections' => [
                 $config['default_connection_name'] => [
+                    'url' => '%env(RABBITMQ_URL)%',
                     'host' => '%env(RABBITMQ_HOST)%',
                     'port' => '%env(RABBITMQ_PORT)%',
                     'user' => '%env(RABBITMQ_USER)%',
@@ -82,6 +94,10 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
                     'read_write_timeout' => 3,
                     'keepalive' => true,
                     'heartbeat' => 0,
+
+                    'ssl_context' => $useSsl ? [
+                        'verify_peer' => true,
+                    ] : null,
                 ],
             ],
             'producers' => $this->getProducers($config),

@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('direct')->defaultValue($this->debug)->end()
                 ->booleanNode('deffered')->defaultTrue()->end()
                 ->scalarNode('default_connection_name')->defaultValue('default')->end()
+                ->booleanNode('use_ssl')->defaultValue(null)->end()
                 ->arrayNode('queues')
                     ->defaultValue(['event' => []])
                     ->useAttributeAsKey('name')
