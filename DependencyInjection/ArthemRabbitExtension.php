@@ -92,9 +92,8 @@ class ArthemRabbitExtension extends Extension implements PrependExtensionInterfa
                     'lazy' => true,
                     'connection_timeout' => 3,
                     'read_write_timeout' => 3,
-                    'keepalive' => true,
+                    'keepalive' => !$useSsl,
                     'heartbeat' => 0,
-
                     'ssl_context' => $useSsl ? [
                         'verify_peer' => true,
                     ] : null,
